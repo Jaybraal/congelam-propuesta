@@ -58,6 +58,21 @@
     margin-top: 4px;
   }
   footer { margin-top: 32px; font-size: 12.5px; color: #7C9099; }
+  .explore { margin-top: 36px; padding-top: 28px; border-top: 1px solid #D8E3E7; }
+  .explore .label { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; color: #7C9099; font-weight: 600; margin-bottom: 12px; }
+  .explore-links { display: flex; flex-direction: column; gap: 8px; }
+  a.mini-link {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 9px;
+    background: transparent;
+    border: 1px dashed #C7D6DB;
+    text-decoration: none;
+    color: #5B7480;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  a.mini-link:hover { border-color: #1E6F8C; color: #16323E; }
 </style>
 </head>
 <body>
@@ -70,6 +85,14 @@
     <div class="links">
       <a class="link" href="propuesta.html">Ver la propuesta completa<span class="sub">Diagnóstico, fases e inversión</span></a>
       <a class="link" href="prototipo.html">Explorar el prototipo interactivo<span class="sub">Sitio público y Oficina Virtual navegables</span></a>
+    </div>
+    <div class="explore">
+      <div class="label">Exploración de diseño (interno)</div>
+      <div class="explore-links">
+        <a class="mini-link" href="diseno-v1-frost.html">V1 — Frost (cadena de frío)</a>
+        <a class="mini-link" href="diseno-v2-industrial.html">V2 — Industrial Safety</a>
+        <a class="mini-link" href="diseno-v3-premium.html">V3 — Premium Trust</a>
+      </div>
     </div>
     <footer>Preparado por Branel Mariano — Julio 2026</footer>
   </div>
