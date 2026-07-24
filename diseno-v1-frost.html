@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Congelam — Frost — Cadena de Frío</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; min-height: 100vh; }
+h1, h2, h3, h4, p, ul, ol { margin: 0; }
+ul { list-style: none; padding: 0; }
+button { font-family: inherit; cursor: pointer; }
+img, svg { display: block; }
+@media (prefers-reduced-motion: reduce) { * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4, p, ul, ol { margin: 0; }
+  ul { list-style: none; padding: 0; }
+  button { font-family: inherit; cursor: pointer; }
+  img, svg { display: block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+
+  /* ============================================================
+     SHARED STRUCTURAL SKELETON — no colors/fonts here, only layout.
+     Each theme supplies its own visual language via variables and
+     a handful of theme-specific component classes.
+  ============================================================ */
+  .app { min-height: 100vh; }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 28px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .nav { display: flex; gap: 24px; }
+  .nav a { text-decoration: none; }
+  .topbar-right { display: flex; align-items: center; gap: 14px; }
+  .nav-toggle { display: none; width: 38px; height: 38px; border-radius: 8px; align-items: center; justify-content: center; font-size: 18px; background: none; }
+
+  .main {
+    padding: 8px 32px 48px;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 20px 0 28px;
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 18px;
+  }
+  .bento .panel-temps { grid-column: 1; grid-row: 1 / 3; }
+  .bento .panel-alerts { grid-column: 2; grid-row: 1; }
+  .bento .panel-dispatch { grid-column: 2; grid-row: 2; }
+  .bento .panel-invoice { grid-column: 1 / 3; grid-row: 3; margin-top: 4px; }
+
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .row { display: flex; align-items: center; justify-content: space-between; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .page-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 20px 0 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .page-head h2 { font-size: 20px; }
+  .page-head .sub { font-size: 13px; }
+
+  .filters {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .filters .field { display: flex; flex-direction: column; gap: 6px; }
+  .filters label { font-size: 12px; font-weight: 600; }
+  .filters input, .filters select {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    min-width: 170px;
+  }
+
+  .table-wrap { overflow-x: auto; border-radius: 16px; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { text-align: left; font-weight: 600; padding: 11px 14px; white-space: nowrap; }
+  .data-table td { padding: 11px 14px; white-space: nowrap; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tfoot td { font-weight: 700; }
+
+  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tabset { display: flex; gap: 4px; }
+  .tabset button { border: none; padding: 8px 14px; border-radius: 999px; font-size: 12.5px; font-weight: 600; }
+
+  .install-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; padding: 7px 13px; border-radius: 999px; border: none; }
+  .bell-btn { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; position: relative; font-size: 15px; }
+  .bell-dot { position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 50%; }
+  .toast { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 14px; font-size: 13px; margin-bottom: 18px; }
+
+  .spark { display: block; width: 100%; height: 46px; margin-top: 10px; }
+  .temp-grid-full { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  @media (max-width: 860px) {
+    .temp-grid-full { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .bento { grid-template-columns: 1fr; }
+    .bento .panel-temps, .bento .panel-alerts, .bento .panel-dispatch, .bento .panel-invoice {
+      grid-column: 1; grid-row: auto;
+    }
+    .topbar { flex-wrap: wrap; }
+    .topbar-left { flex-wrap: wrap; row-gap: 10px; }
+    .nav-toggle { display: flex; }
+    .nav { display: none; width: 100%; flex-direction: column; gap: 0; order: 3; }
+    .nav.nav-open { display: flex; }
+    .nav a { padding: 12px 4px; border-bottom: 1px solid var(--border); }
+    .topbar, .main { padding-left: 16px; padding-right: 16px; }
+  }
+
+  /* ============================================================
+     THEME A — "Cadena de Frío" (Cold Chain)
+     Frost/condensation language. Ice-pale surface, steel-navy ink,
+     one warm amber reserved strictly for things that need attention.
+     Signature: frosted-glass temperature cards with a "breath fog"
+     gradient and a condensation-drop status dot.
+  ============================================================ */
+  .theme-a {
+    --bg: #EAF4F8;
+    --surface: #FFFFFF;
+    --surface-2: #F3FAFC;
+    --ink: #12303F;
+    --ink-soft: #52717F;
+    --accent: #1E88A8;
+    --accent-deep: #0F5C74;
+    --warn: #E8871E;
+    --danger: #D64545;
+    --ok: #1E9E6F;
+    --border: #D3E6EE;
+    --font-display: "Space Grotesk", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+  }
+  .theme-a .brand-mark {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: linear-gradient(160deg, var(--accent), var(--accent-deep));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  }
+  .theme-a .brand-name { font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: -0.01em; }
+  .theme-a .brand-sub { font-size: 12px; color: var(--ink-soft); }
+  .theme-a .nav a { color: var(--ink-soft); font-size: 14px; font-weight: 500; padding: 6px 2px; border-bottom: 2px solid transparent; }
+  .theme-a .nav a.current { color: var(--accent-deep); border-color: var(--accent); }
+  .theme-a .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family: var(--font-display); font-weight:600; color: var(--accent-deep); font-size: 13px; }
+
+  .theme-a .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 16px 18px;
+  }
+  .theme-a .kpi .num { font-family: var(--font-display); font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .theme-a .kpi .lbl { font-size: 12.5px; color: var(--ink-soft); margin-top: 4px; }
+  .theme-a .kpi.warn .num { color: var(--warn); }
+
+  .theme-a .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px 20px 22px;
+  }
+  .theme-a .panel-head h3 { font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+  .theme-a .panel-head .meta { font-size: 12px; color: var(--ink-soft); }
+
+  .theme-a .frost-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .theme-a .frost-card {
+    position: relative;
+    border-radius: 16px;
+    padding: 14px 14px 12px;
+    background:
+      radial-gradient(120% 140% at 15% -10%, rgba(255,255,255,.9), transparent 55%),
+      linear-gradient(160deg, #F6FBFD, var(--surface-2));
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .theme-a .frost-card.alert { border-color: rgba(230,135,30,.5); background: linear-gradient(160deg, #FFF6EA, #FFEFDB); }
+  .theme-a .frost-card .cname { font-size: 12.5px; color: var(--ink-soft); font-weight: 500; }
+  .theme-a .frost-card .temp { font-family: var(--font-mono); font-size: 26px; font-weight: 600; margin-top: 6px; display:flex; align-items:center; gap:8px; }
+  .theme-a .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px rgba(30,158,111,.15); }
+  .theme-a .frost-card.alert .dot { background: var(--warn); box-shadow: 0 0 0 4px rgba(232,135,30,.18); }
+  .theme-a .frost-card .range { font-size: 11px; color: var(--ink-soft); margin-top: 4px; }
+
+  .theme-a .list-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .theme-a .list-item:last-child { border-bottom: none; }
+  .theme-a .list-item .title { font-size: 13.5px; font-weight: 600; }
+  .theme-a .list-item .sub { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .theme-a .chip.danger { background: #FCE7E4; color: var(--danger); }
+  .theme-a .chip.warn { background: #FCEDDA; color: #A85E12; }
+  .theme-a .chip.ok { background: #E1F3EA; color: var(--ok); }
+  .theme-a .chip.info { background: #E4EFF4; color: var(--accent-deep); }
+
+  .theme-a .invoice-row { display:flex; align-items:center; justify-content: space-between; padding: 8px 0; }
+  .theme-a .btn { background: var(--accent); color:#fff; border:none; padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; }
+  .theme-a .btn:hover { background: var(--accent-deep); }
+  .theme-a .btn:focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 2px; }
+  .theme-a .btn.ghost { background: transparent; color: var(--accent-deep); border: 1px solid var(--border); }
+  .theme-a .btn.ghost:hover { background: var(--surface-2); }
+
+  .theme-a .page-head h2 { font-family: var(--font-display); font-weight: 700; }
+  .theme-a .page-head .sub { color: var(--ink-soft); }
+  .theme-a .filters input, .theme-a .filters select { border: 1px solid var(--border); background: var(--surface); color: var(--ink); }
+  .theme-a .table-wrap { background: var(--surface); border: 1px solid var(--border); }
+  .theme-a .data-table th { background: var(--surface-2); color: var(--ink-soft); font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; }
+  .theme-a .data-table td { border-bottom: 1px solid var(--border); }
+  .theme-a .data-table tr:hover td { background: var(--surface-2); }
+  .theme-a .data-table tfoot td { background: var(--surface-2); border-top: 2px solid var(--border); border-bottom: none; }
+  .theme-a .tabset button { background: var(--surface-2); color: var(--ink-soft); }
+  .theme-a .tabset button.active { background: var(--accent); color: #fff; }
+  .theme-a .install-pill { background: var(--accent); color: #fff; }
+  .theme-a .bell-btn { background: var(--surface-2); color: var(--accent-deep); }
+  .theme-a .bell-dot { background: var(--danger); box-shadow: 0 0 0 2px var(--surface); }
+  .theme-a .toast { background: #FFF6EA; border: 1px solid rgba(232,135,30,.35); color: var(--ink); }
+  .theme-a .spark .line { stroke: var(--accent); }
+  .theme-a .spark .fill { fill: url(#sparkfade-a); }
+  .theme-a .nav a { cursor: pointer; }
+
+  /* ---- Sitio público (theme A) ---- */
+  .site-public.hidden { display: none; }
+  #site-app.site-app { display: none; }
+  #site-app.site-app.visible { display: block; }
+
+  .theme-a .pub-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; border-bottom: 1px solid var(--border); }
+  .theme-a .pub-nav { display: flex; gap: 26px; }
+  .theme-a .pub-nav a { color: var(--ink-soft); font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer; }
+  .theme-a .pub-nav a.current { color: var(--accent-deep); }
+  .theme-a .nav-toggle, .theme-a .nav-toggle.private { border: 1px solid var(--border); color: var(--ink); }
+  .theme-a .pub-header-actions { display: flex; align-items: center; gap: 10px; }
+  .theme-a .btn-login { background: transparent; border: 1px solid var(--accent); color: var(--accent-deep); padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .theme-a .btn-login:hover { background: var(--surface-2); }
+
+  .theme-a .pub-page { display: none; }
+  .theme-a .pub-page.active { display: block; }
+
+  .theme-a .pub-hero { position: relative; height: 420px; background-size: cover; background-position: center; display: flex; align-items: flex-end; }
+  .theme-a .pub-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(18,48,63,.85), rgba(18,48,63,.15) 60%); }
+  .theme-a .pub-hero-content { position: relative; z-index: 1; padding: 40px 32px 44px; max-width: 640px; color: #fff; }
+  .theme-a .pub-hero-content .k { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; opacity: .85; }
+  .theme-a .pub-hero-content h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(24px,4vw,36px); line-height: 1.15; margin-top: 10px; }
+  .theme-a .pub-hero-content p { margin-top: 14px; font-size: 14.5px; opacity: .92; max-width: 500px; }
+  .theme-a .pub-cta-row { margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .theme-a .btn-cta { background: var(--accent); color: #fff; border: none; padding: 12px 22px; border-radius: 10px; font-weight: 600; font-size: 13.5px; cursor: pointer; font-family: inherit; }
+  .theme-a .btn-cta:hover { background: var(--accent-deep); }
+  .theme-a .btn-cta.ghost { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.5); color: #fff; }
+
+  .theme-a .pub-section { padding: 52px 32px; max-width: 1080px; margin: 0 auto; }
+  .theme-a .pub-eyebrow { font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--accent-deep); font-weight: 600; margin-bottom: 10px; }
+  .theme-a .pub-section h2 { font-family: var(--font-display); font-size: 25px; font-weight: 700; max-width: 600px; }
+  .theme-a .pub-lead { margin-top: 10px; color: var(--ink-soft); font-size: 14.5px; max-width: 640px; }
+
+  .theme-a .value-grid { margin-top: 30px; display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  .theme-a .value-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 22px 16px; text-align: center; }
+  .theme-a .value-card .ic { width: 44px; height: 44px; border-radius: 12px; background: var(--surface-2); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 19px; color: var(--accent-deep); }
+  .theme-a .value-card .ic svg { width: 22px; height: 22px; }
+  .theme-a .value-card .t { font-weight: 600; font-size: 13px; }
+
+  .theme-a .svc-grid { margin-top: 26px; display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+  .theme-a .svc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; display: flex; gap: 14px; }
+  .theme-a .svc-card .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--surface-2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 17px; }
+  .theme-a .svc-card .t { font-weight: 600; font-size: 13.5px; }
+  .theme-a .svc-card .d { font-size: 12.5px; color: var(--ink-soft); margin-top: 4px; }
+
+  .theme-a .about-stats { margin-top: 26px; display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  .theme-a .about-stats .stat { background: var(--surface-2); border-radius: 16px; padding: 18px; }
+  .theme-a .about-stats .n { font-family: var(--font-display); font-weight: 700; font-size: 19px; color: var(--accent-deep); }
+  .theme-a .about-stats .l { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
+  .theme-a .about-quote { margin-top: 32px; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 24px; display: flex; gap: 18px; align-items: center; }
+  .theme-a .about-quote img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+  .theme-a .about-quote p { font-size: 14px; font-style: italic; }
+  .theme-a .about-quote .who { margin-top: 6px; font-size: 12.5px; color: var(--ink-soft); font-style: normal; font-weight: 600; }
+
+  .theme-a .market-empty { margin-top: 22px; background: var(--surface); border: 1.5px dashed var(--border); border-radius: 18px; padding: 30px; text-align: center; color: var(--ink-soft); font-size: 13.5px; }
+  .theme-a .market-banner { background: linear-gradient(160deg,var(--accent),var(--accent-deep)); color: #fff; border-radius: 18px; padding: 24px 26px; }
+  .theme-a .market-banner h3 { font-family: var(--font-display); font-size: 17px; }
+  .theme-a .market-banner p { margin-top: 8px; font-size: 13px; opacity: .92; max-width: 560px; }
+  .theme-a .market-examples { margin-top: 22px; display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .theme-a .market-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; position: relative; }
+  .theme-a .market-card .tag-example { position: absolute; top: 12px; right: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--accent-deep); background: var(--surface-2); padding: 3px 8px; border-radius: 999px; }
+  .theme-a .market-card .t { font-weight: 600; font-size: 14px; margin-top: 4px; padding-right: 90px; }
+  .theme-a .market-card .d { font-size: 12.5px; color: var(--ink-soft); margin-top: 6px; }
+  .theme-a .market-card .price { margin-top: 10px; font-weight: 700; color: var(--accent-deep); font-size: 14px; }
+
+  .theme-a .contact-grid { margin-top: 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .theme-a .contact-info .row2 { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+  .theme-a .form-field { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .theme-a .form-field label { font-size: 12.5px; font-weight: 600; }
+  .theme-a .form-field input, .theme-a .form-field textarea { font-family: inherit; font-size: 13.5px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); width: 100%; }
+  .theme-a .form-field textarea { resize: vertical; min-height: 80px; }
+
+  .theme-a .pub-footer { border-top: 1px solid var(--border); padding: 28px 32px; text-align: center; font-size: 12.5px; color: var(--ink-soft); }
+
+  @media (max-width: 860px) {
+    .theme-a .value-grid, .theme-a .svc-grid, .theme-a .about-stats, .theme-a .contact-grid, .theme-a .market-examples { grid-template-columns: 1fr; }
+    .theme-a .pub-header { flex-wrap: wrap; }
+    .theme-a .nav-toggle { display: flex; }
+    .theme-a .pub-nav { display: none; width: 100%; flex-direction: column; gap: 0; order: 3; margin-top: 12px; }
+    .theme-a .pub-nav.nav-open { display: flex; }
+    .theme-a .pub-nav a { padding: 12px 4px; border-bottom: 1px solid var(--border); }
+  }
+
+
+.theme-a {
+  --bg: #EDF7FC;
+  --surface: #FFFFFF;
+  --surface-2: #E3F3FA;
+  --ink: #0B2942;
+  --ink-soft: #4C7086;
+  --accent: #0EA5C4;
+  --accent-deep: #06647D;
+  --warn: #E8871E;
+  --danger: #D64545;
+  --ok: #1E9E6F;
+  --border: #CFE9F2;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+  .theme-a .svc-card .ic svg { width: 19px; height: 19px; color: var(--accent-deep); }
+  .theme-a .contact-info .row2 .ic { display: inline-flex; width: 20px; height: 20px; flex-shrink: 0; color: var(--accent-deep); }
+  .theme-a .contact-info .row2 .ic svg { width: 20px; height: 20px; }
+  .theme-a .nav-toggle svg { width: 18px; height: 18px; }
+
+
+  body { background: radial-gradient(circle at 15% 0%, #F4FBFE 0%, var(--bg) 55%); }
+  .theme-a .value-card, .theme-a .svc-card, .theme-a .market-card, .theme-a .about-quote, .theme-a .stat {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.65);
+    box-shadow: 0 8px 30px rgba(14,165,196,0.10);
+  }
+  .theme-a .value-card .ic, .theme-a .svc-card .ic { background: rgba(255,255,255,0.85); }
+  .theme-a .pub-header { backdrop-filter: blur(10px); background: rgba(237,247,252,0.85); }
+
+</style>
+</head>
+<body>
+<section class="theme-a" id="theme-a">
+<div class="site-public" id="site-public">
+    <header class="pub-header">
+      <div class="brand">
+        <div class="brand-mark">CG</div>
+        <div>
+          <div class="brand-name">Congelam</div>
+          <div class="brand-sub">Almacenamiento en frío</div>
+        </div>
+      </div>
+      <nav class="pub-nav">
+        <a class="current" data-pubpage="inicio">Inicio</a>
+        <a data-pubpage="servicios">Servicios</a>
+        <a data-pubpage="nosotros">Sobre Nosotros</a>
+        <a data-pubpage="suplidores">Mercado de Suplidores</a>
+        <a data-pubpage="contacto">Contacto</a>
+      </nav>
+      <div class="pub-header-actions">
+        <button class="nav-toggle" id="pub-nav-toggle" aria-label="Abrir menú" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <button class="btn-login" id="btn-go-app">Iniciar sesión</button>
+      </div>
+    </header>
+
+    <div class="pub-page active" data-pubpage="inicio">
+      <div class="pub-hero" style="background-image:url('congelam_hero.jpg')">
+        <div class="pub-hero-content">
+          <div class="k">Santo Domingo Este, R.D.</div>
+          <h1>Su mercancía, siempre a la temperatura correcta.</h1>
+          <p>Almacenamiento de productos congelados, refrigerados y secos, con 4 cámaras de frío y visibilidad total desde su oficina virtual.</p>
+          <div class="pub-cta-row">
+            <button class="btn-cta">Solicitar cotización</button>
+            <button class="btn-cta ghost" data-pubpage-link="servicios">Ver servicios</button>
+          </div>
+        </div>
+      </div>
+      <div class="pub-section">
+        <div class="pub-eyebrow">Por qué Congelam</div>
+        <h2>Cuatro razones por las que sus productos están seguros aquí.</h2>
+        <div class="value-grid">
+          <div class="value-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 9.5V20h14V9.5"/><path d="M9 20v-6h6v6"/></svg></div><div class="t">Almacén general de depósito</div></div>
+          <div class="value-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2v20M3.5 7l17 10M20.5 7l-17 10"/></svg></div><div class="t">100 toneladas de capacidad de enfriamiento</div></div>
+          <div class="value-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 5.5v5.4c0 5 3.2 8.4 7.5 9.6 4.3-1.2 7.5-4.6 7.5-9.6V5.5Z"/><path d="m9 12 2 2 4-4.2"/></svg></div><div class="t">Mercancía asegurada — Ley 6186</div></div>
+          <div class="value-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.2"/><path d="m9 13.5-2 7 5-2.6 5 2.6-2-7"/></svg></div><div class="t">Reconocidos internacionalmente</div></div>
+        </div>
+      </div>
+      <div class="pub-section" style="padding-top:0">
+        <div class="market-banner">
+          <h3>¿Ya es cliente? Consulte su inventario, temperaturas y despachos en tiempo real.</h3>
+          <p>Acceda a la Oficina Virtual con su usuario y contraseña.</p>
+          <button class="btn-cta" style="margin-top:14px;background:#fff;color:var(--accent-deep)" id="btn-go-app-2">Iniciar sesión →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-page" data-pubpage="servicios">
+      <div class="pub-section">
+        <div class="pub-eyebrow">Servicios</div>
+        <h2>Controlamos su mercancía con software automático que mantiene su inventario al día.</h2>
+        <p class="pub-lead">Acceso vía Internet mediante código secreto a la base de datos del almacén, con reportes estrictamente confidenciales.</p>
+        <div class="svc-grid">
+          <div class="svc-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div><div><div class="t">Inventario por código de producto</div><div class="d">Consulte el estado de un producto específico al instante.</div></div></div>
+          <div class="svc-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 10h6M9 14h6M9 18h3"/></svg></div><div><div class="t">Inventario completo</div><div class="d">Vista general de todo lo que tiene almacenado.</div></div></div>
+          <div class="svc-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2.5-1.5L13 21l-2.5-1.5L8 21l-2-1.5V3Z"/><path d="M9 8h6M9 12h6"/></svg></div><div><div class="t">Conduces de entrada y salida</div><div class="d">Impresión de documentos de recibo y despacho.</div></div></div>
+          <div class="svc-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M7 15h4"/></svg></div><div><div class="t">Consulta de cuenta por pagar</div><div class="d">Estado de cuenta y soporte de facturación al día.</div></div></div>
+          <div class="svc-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.3 2.3L16 10"/></svg></div><div><div class="t">Autorización de entregas</div><div class="d">Autorice despachos a clientes o a sus propios vendedores.</div></div></div>
+          <div class="svc-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg></div><div><div class="t">Conexión para 40 contenedores</div><div class="d">Capacidad de conexión thermoking para hasta 40 contenedores a la vez.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-page" data-pubpage="nosotros">
+      <div class="pub-section">
+        <div class="pub-eyebrow">Sobre Nosotros</div>
+        <h2>Empresa de almacenamiento aprobada por Industria y Comercio de R.D.</h2>
+        <p class="pub-lead">4 cámaras de frío con aproximadamente 15,000 m³, con recirculación de aire que mantiene la misma temperatura en cada punto de la cámara. La humedad relativa está naturalmente controlada por nuestra ubicación geográfica.</p>
+        <div class="about-stats">
+          <div class="stat"><div class="n">4 cámaras</div><div class="l">de frío</div></div>
+          <div class="stat"><div class="n">~15,000 m³</div><div class="l">de capacidad</div></div>
+          <div class="stat"><div class="n">40 contenedores</div><div class="l">con conexión thermoking a la vez</div></div>
+          <div class="stat"><div class="n">100 toneladas</div><div class="l">de capacidad de enfriamiento</div></div>
+        </div>
+        <div class="about-quote">
+          <img src="congelam_avatar.jpg" alt="Congelam">
+          <div><p>"Su interés es el éxito de su negocio; cuente con nosotros para lograrlo."</p><div class="who">Congelados AM, S.R.L.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-page" data-pubpage="suplidores">
+      <div class="pub-section">
+        <div class="pub-eyebrow">Mercado de Suplidores</div>
+        <h2>Productos congelados, refrigerados y secos de suplidores locales, a precio especial.</h2>
+        <p class="pub-lead">Sin intermediarios, sin comisión: contacte directo al suplidor por teléfono o correo. Su mercancía, depositada en Congelam, aparece aquí según lo disponga.</p>
+        <div class="pub-eyebrow" style="margin-top:30px">Así se vería activo</div>
+        <div class="market-examples">
+          <div class="market-card"><span class="tag-example">Ejemplo ilustrativo</span><div class="t">Camarones enteros 20lb</div><div class="d">Suplidor: Mariscos del Caribe · Congelado</div><div class="price">RD$1,850/caja</div></div>
+          <div class="market-card"><span class="tag-example">Ejemplo ilustrativo</span><div class="t">Pechuga de pollo IQF</div><div class="d">Suplidor: Avícola Higüey · Congelado</div><div class="price">RD$95/lb</div></div>
+          <div class="market-card"><span class="tag-example">Ejemplo ilustrativo</span><div class="t">Queso de hoja</div><div class="d">Suplidor: Lácteos del Cibao · Refrigerado</div><div class="price">RD$210/lb</div></div>
+        </div>
+        <div class="market-empty" style="margin-top:16px">Estos tres productos son solo un ejemplo de cómo se vería activo — hoy no hay ningún producto real publicado en el Mercado de Suplidores. Es la primera oportunidad de aparecer aquí.</div>
+      </div>
+    </div>
+
+    <div class="pub-page" data-pubpage="contacto">
+      <div class="pub-section">
+        <div class="pub-eyebrow">Contacto</div>
+        <h2>Cuéntenos qué necesita almacenar y le enviamos una cotización.</h2>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="row2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg></span><span>Marginal de Las Américas, esq. La Milagrosa, KM 17½, Santo Domingo Este, R.D.</span></div>
+            <div class="row2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg></span><span>(809) 561-4477</span></div>
+            <div class="row2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 6.5 8 6.5 8-6.5"/></svg></span><span>info@congelam.com</span></div>
+          </div>
+          <div>
+            <div class="form-field"><label>Nombre y empresa</label><input type="text" placeholder="Ej. Juan Pérez — Mariscos del Caribe"></div>
+            <div class="form-field"><label>Teléfono o correo</label><input type="text" placeholder="Ej. 809-555-0000"></div>
+            <div class="form-field"><label>¿Qué necesita almacenar?</label><textarea placeholder="Ej. 500 cajas de mariscos congelados, entrega semanal"></textarea></div>
+            <button class="btn-cta">Solicitar cotización</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="pub-footer">Congelados AM, S.R.L. — Marginal de Las Américas, Santo Domingo Este, R.D. — (809) 561-4477</footer>
+  </div>
+
+</section>
+<script>
+
+document.getElementById('pub-nav-toggle')?.addEventListener('click', (e) => {
+  const isOpen = document.querySelector('#site-public .pub-nav').classList.toggle('nav-open');
+  e.currentTarget.setAttribute('aria-expanded', String(isOpen));
+});
+
+const pubNav = document.querySelectorAll('#site-public .pub-nav a[data-pubpage]');
+function showPubPage(name) {
+  pubNav.forEach(l => l.classList.toggle('current', l.dataset.pubpage === name));
+  document.querySelectorAll('#site-public .pub-page').forEach(p => p.classList.toggle('active', p.dataset.pubpage === name));
+  document.querySelector('#site-public .pub-nav').classList.remove('nav-open');
+  window.scrollTo({top:0});
+}
+pubNav.forEach(link => link.addEventListener('click', () => showPubPage(link.dataset.pubpage)));
+document.querySelectorAll('#site-public [data-pubpage-link]').forEach(el => {
+  el.addEventListener('click', () => showPubPage(el.dataset.pubpageLink));
+});
+
+</script>
+</body>
+</html>
