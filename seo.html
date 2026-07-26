@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Congelam — Diagnóstico SEO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EAF4F8; --surface:#FFFFFF; --surface-2:#F3FAFC;
+    --ink:#12303F; --ink-soft:#52717F;
+    --accent:#1E88A8; --accent-deep:#0F5C74;
+    --warn:#E8871E; --danger:#D64545; --ok:#1E9E6F;
+    --border:#D3E6EE;
+    --display:"Space Grotesk",sans-serif; --body:"Inter",sans-serif; --mono:"IBM Plex Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;}
+  h1,h2,h3,p,ul{margin:0;}
+  .wrap{max-width:900px;margin:0 auto;padding:0 28px;}
+
+  .hero{padding:56px 0 40px;border-bottom:1px solid var(--border);}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:36px;}
+  .brand-mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(160deg,var(--accent),var(--accent-deep));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--display);font-weight:700;}
+  .brand-name{font-family:var(--display);font-weight:700;font-size:19px;}
+  .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,3.2vw,36px);letter-spacing:-0.02em;line-height:1.2;text-wrap:balance;max-width:760px;}
+  .hero .lead{margin-top:16px;font-size:16px;color:var(--ink-soft);max-width:680px;}
+  .hero .meta{margin-top:28px;display:flex;gap:28px;flex-wrap:wrap;font-size:13px;color:var(--ink-soft);}
+  .hero .meta strong{color:var(--ink);font-weight:600;}
+
+  section{padding:48px 0;border-bottom:1px solid var(--border);}
+  section:last-of-type{border-bottom:none;}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-deep);font-weight:600;margin-bottom:10px;}
+  h2{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-0.01em;max-width:640px;}
+  .section-lead{margin-top:10px;font-size:15px;color:var(--ink-soft);max-width:680px;}
+
+  .finding-grid{margin-top:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .finding{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--sev,var(--accent));border-radius:14px;padding:18px;}
+  .finding .tag{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;color:var(--sev,var(--accent-deep));margin-bottom:8px;display:block;}
+  .finding .t{font-weight:600;font-size:14.5px;}
+  .finding p{font-size:13px;color:var(--ink-soft);margin-top:6px;}
+  @media (max-width:760px){ .finding-grid{grid-template-columns:1fr;} }
+
+  .checklist{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;}
+  .checklist li{list-style:none;display:flex;gap:10px;font-size:14px;padding:10px 0;border-bottom:1px solid var(--border);}
+  .checklist li::before{content:"○";color:var(--accent);font-weight:700;}
+  @media (max-width:760px){ .checklist{grid-template-columns:1fr;} }
+
+  .price-table{margin-top:24px;width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;font-size:14px;}
+  .price-table th{text-align:left;background:var(--surface-2);color:var(--ink-soft);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;padding:12px 16px;}
+  .price-table td{padding:16px;border-top:1px solid var(--border);vertical-align:top;}
+  .price-table .amount{font-family:var(--mono);font-weight:700;white-space:nowrap;font-size:16px;color:var(--accent-deep);}
+  .price-note{margin-top:10px;font-size:12.5px;color:var(--ink-soft);}
+  .pay-tag{display:inline-block;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;color:#fff;background:var(--accent);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+
+  .cta{background:linear-gradient(160deg,var(--accent-deep),var(--accent));border-radius:24px;padding:40px 36px;color:#fff;margin:48px 0;}
+  .cta h2{color:#fff;}
+  .cta .section-lead{color:rgba(255,255,255,.85);}
+  .cta .contact{margin-top:22px;display:flex;gap:32px;flex-wrap:wrap;font-size:14px;}
+  .cta .contact strong{display:block;font-family:var(--display);font-size:16px;margin-bottom:2px;}
+
+  footer{padding:28px 0 50px;font-size:12px;color:var(--ink-soft);text-align:center;}
+  a.back{font-size:13px;color:var(--accent-deep);text-decoration:none;font-weight:600;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brand"><div class="brand-mark">CG</div><div class="brand-name">Congelam</div></div>
+    <h1>Hoy, casi nadie los encuentra buscando lo que ustedes ya hacen mejor que nadie.</h1>
+    <p class="lead">Revisamos a fondo cómo aparece Congelam hoy, tanto en el buscador clásico (Google) como en las nuevas formas de búsqueda con inteligencia artificial (ChatGPT, Perplexity, Copilot). Este es un resumen de alto nivel — el diagnóstico completo y el plan detallado se entregan al arrancar el servicio.</p>
+    <div class="meta">
+      <div><strong>Preparado para:</strong> Congelam</div>
+      <div><strong>Fecha:</strong> Julio 2026</div>
+      <div><strong>Alcance:</strong> Diagnóstico inicial de visibilidad</div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Diagnóstico</div>
+    <h2>Lo que encontramos</h2>
+    <p class="section-lead">Un vistazo rápido a las señales más importantes. Cada una de estas es real, verificada directamente contra el sitio en vivo — no es una lista genérica.</p>
+    <div class="finding-grid">
+      <div class="finding" style="--sev:var(--danger)">
+        <span class="tag">Crítico</span>
+        <div class="t">Invisibles para IA y para Bing</div>
+        <p>Una configuración del sitio les cierra la puerta a todo buscador que no sea Google clásico — incluyendo ChatGPT, Perplexity y Copilot. Si alguien le pregunta a una IA "dónde almaceno productos congelados en Santo Domingo", Congelam no puede aparecer.</p>
+      </div>
+      <div class="finding" style="--sev:var(--warn)">
+        <span class="tag">Alto</span>
+        <div class="t">Cada página se ve igual para Google</div>
+        <p>Ninguna página del sitio le dice a Google qué es, qué servicio ofrece ni en qué ciudad — ni la portada, ni "Servicios", ni "Almacén Fiscal". Google no tiene con qué mostrarlos en los resultados de forma atractiva.</p>
+      </div>
+      <div class="finding" style="--sev:var(--warn)">
+        <span class="tag">Alto</span>
+        <div class="t">Cero "ficha" digital para Google</div>
+        <p>Google no tiene los datos estructurados que necesita para armar una ficha enriquecida ni para confiar a Congelam un lugar en el mapa/búsqueda local — a pesar de que sí tienen dirección y teléfono publicados.</p>
+      </div>
+      <div class="finding" style="--sev:var(--warn)">
+        <span class="tag">Alto</span>
+        <div class="t">Rastros de una migración nunca cerrada</div>
+        <p>Google todavía tiene indexadas páginas de una versión anterior del sitio que hoy ya no existen. Quien llega desde esos resultados viejos cae en una página muerta.</p>
+      </div>
+      <div class="finding" style="--sev:var(--accent)">
+        <span class="tag">Medio</span>
+        <div class="t">El sitio le habla al cliente que ya tienen</div>
+        <p>La portada está pensada para quien ya es cliente (iniciar sesión, oficina virtual). A un visitante nuevo que llega buscando el servicio no se le ofrece un camino claro para pedir información.</p>
+      </div>
+      <div class="finding" style="--sev:var(--accent)">
+        <span class="tag">Medio</span>
+        <div class="t">Directorios genéricos les ganan el lugar</div>
+        <p>Para varias búsquedas de su propio rubro, páginas de directorio genérico aparecen por encima del sitio propio de Congelam — señal de que la competencia directa está mejor optimizada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Servicio</div>
+    <h2>Qué haríamos, mes a mes</h2>
+    <p class="section-lead">No es un arreglo de una sola vez — la visibilidad se construye y se defiende. Esto es lo que cubre el trabajo continuo:</p>
+    <ul class="checklist">
+      <li>Revisión continua para que el sitio se mantenga saludable en los buscadores</li>
+      <li>Reescritura de títulos y descripciones por página</li>
+      <li>Información para que Google muestre una ficha más completa y los ubique en el mapa</li>
+      <li>Limpieza de enlaces y páginas viejas que ya no existen</li>
+      <li>Visibilidad en los nuevos buscadores con inteligencia artificial: ChatGPT, Perplexity, Copilot</li>
+      <li>Contenido orientado a lo que sus clientes reales buscan</li>
+      <li>Seguimiento frente a la competencia directa</li>
+      <li>Reporte mensual de resultados, en lenguaje claro</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Inversión</div>
+    <h2>Conclusión</h2>
+    <p class="section-lead">Con lo que encontramos, el trabajo de SEO + visibilidad en IA para congelam.com se cotiza como servicio mensual continuo:</p>
+    <table class="price-table">
+      <thead><tr><th>Servicio</th><th>Incluye</th><th>Inversión</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="pay-tag">Mensual</span></td>
+          <td>Todo el trabajo descrito arriba: posicionamiento en buscadores y visibilidad en las nuevas búsquedas con inteligencia artificial</td>
+          <td class="amount">USD $2,000/mes</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="price-note">Facturación mensual. No incluye presupuesto de pauta publicitaria (Google/Meta Ads) ni desarrollo de páginas nuevas — eso se cotiza aparte si aplica.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="cta">
+    <h2>¿Seguimos?</h2>
+    <p class="section-lead">Este diagnóstico es solo la punta — hay más detalle técnico detrás de cada hallazgo que compartimos al arrancar.</p>
+    <div class="contact">
+      <div><strong>Branel Mariano</strong>Propuesta preparada para Congelam</div>
+    </div>
+  </div>
+</div>
+
+<footer class="wrap">
+  <a class="back" href="index.html">← Volver</a>
+  <div style="margin-top:14px;">Preparado por Branel Mariano — Julio 2026</div>
+</footer>
+
+</body>
+</html>
